@@ -55,11 +55,24 @@ const DeviceList = () => {
   const fetchDevices = async () => {
     try {
       setLoading(true);
-      // For now, load from local file. User can replace this URL with their GitHub repo
-      const response = await fetch('/devices/pipa.json');
-      const data: DeviceResponse = await response.json();
-      setDevices(data.response);
-      setFilteredDevices(data.response);
+      // Fetch device list from GitHub repo
+      const repoUrl = 'https://api.github.com/repos/MistOS-Devices/official_devices/contents';
+      const response = await fetch(repoUrl);
+      const files = await response.json();
+      
+      // Filter JSON files
+      const deviceFiles = files.filter((file: any) => file.name.endsWith('.json'));
+      
+      // Fetch each device JSON file
+      const devicePromises = deviceFiles.map(async (file: any) => {
+        const fileResponse = await fetch(file.download_url);
+        const deviceData: DeviceResponse = await fileResponse.json();
+        return deviceData.response[0]; // Get first device from response array
+      });
+      
+      const allDevices = await Promise.all(devicePromises);
+      setDevices(allDevices);
+      setFilteredDevices(allDevices);
     } catch (error) {
       console.error('Error fetching devices:', error);
       toast({
@@ -73,7 +86,7 @@ const DeviceList = () => {
   };
 
   return (
-    <section className="py-20 px-4 relative">
+    <section id="devices" className="py-20 px-4 relative">
       <div className="container mx-auto">
         <div className="text-center mb-12 space-y-4">
           <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">

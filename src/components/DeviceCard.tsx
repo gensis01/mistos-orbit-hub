@@ -1,7 +1,8 @@
-import { Download, User, Calendar, HardDrive } from "lucide-react";
+import { User, Calendar, HardDrive, ChevronRight } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useNavigate } from "react-router-dom";
 
 interface DeviceData {
   maintainer: string;
@@ -26,6 +27,8 @@ interface DeviceCardProps {
 }
 
 const DeviceCard = ({ device }: DeviceCardProps) => {
+  const navigate = useNavigate();
+
   const formatDate = (timestamp: number) => {
     return new Date(timestamp * 1000).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -40,8 +43,17 @@ const DeviceCard = ({ device }: DeviceCardProps) => {
   };
 
   return (
-    <Card className="bg-card/50 backdrop-blur border-primary/20 hover:border-primary/50 transition-all duration-300 hover:shadow-[var(--glow-cyan)] group">
-      <CardHeader className="space-y-2">
+    <Card className="bg-card/50 backdrop-blur border-primary/20 hover:border-primary/50 transition-all duration-300 hover:shadow-[var(--glow-cyan)] group cursor-pointer" onClick={() => navigate(`/device/${device.device}`)}>
+      <CardHeader className="space-y-4">
+        {/* Device Image */}
+        <div className="relative w-full aspect-[3/4] rounded-lg overflow-hidden bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
+          <img 
+            src="https://placeholder-device-image.com/device.png" 
+            alt={`${device.oem} ${device.device}`}
+            className="w-full h-full object-contain"
+          />
+        </div>
+        
         <div className="flex items-start justify-between">
           <div>
             <h3 className="text-2xl font-bold text-primary group-hover:text-secondary transition-colors">
@@ -91,10 +103,13 @@ const DeviceCard = ({ device }: DeviceCardProps) => {
       <CardFooter>
         <Button 
           className="w-full bg-gradient-to-r from-primary to-secondary hover:shadow-[var(--glow-cyan)] transition-all duration-300"
-          onClick={() => window.open(device.download, '_blank')}
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate(`/device/${device.device}`);
+          }}
         >
-          <Download className="mr-2 h-4 w-4" />
-          Download ROM
+          View Details
+          <ChevronRight className="ml-2 h-4 w-4" />
         </Button>
       </CardFooter>
     </Card>

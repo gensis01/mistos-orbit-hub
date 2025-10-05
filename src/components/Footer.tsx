@@ -45,13 +45,17 @@ const Footer = () => {
             <h3 className="text-lg font-semibold">Community</h3>
             <div className="flex gap-4">
               <a
-                href="#"
+                href="https://github.com/MistOS-Devices"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-card border border-primary/30 hover:border-primary/50 flex items-center justify-center hover:shadow-[var(--glow-cyan)] transition-all duration-300"
               >
                 <Github className="h-5 w-5" />
               </a>
               <a
-                href="#"
+                href="https://t.me/MistOS_Official"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-card border border-primary/30 hover:border-primary/50 flex items-center justify-center hover:shadow-[var(--glow-cyan)] transition-all duration-300"
               >
                 <MessageCircle className="h-5 w-5" />
